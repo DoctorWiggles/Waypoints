@@ -1,5 +1,7 @@
-Waypoints
+Waypoints 1.8.9 - Experimental
 =========
+~< Currently under heavy work >~
+
 Minecraft mod that mod brings waypoint system from Diablo series to Minecraft.
 
 Place 4 waypoints blocks near each other to form a 2x1x2 waypoint structure:
