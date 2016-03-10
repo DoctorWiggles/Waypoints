@@ -1,12 +1,13 @@
 package info.jbcs.minecraft.waypoints.network;
 
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+
 import info.jbcs.minecraft.waypoints.Waypoint;
 import info.jbcs.minecraft.waypoints.WaypointPlayerInfo;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class MsgDelete extends Message {
     private Waypoint w;
@@ -35,7 +36,8 @@ public class MsgDelete extends Message {
             EntityPlayerMP player = ctx.getServerHandler().playerEntity;
             if (message.w == null) return null;
 
-            WaypointPlayerInfo info = WaypointPlayerInfo.get(player.getDisplayName());
+            //WaypointPlayerInfo info = WaypointPlayerInfo.get(player.getDisplayName());
+            WaypointPlayerInfo info = WaypointPlayerInfo.get((player.getDisplayName().toString()));
             if (info == null) return null;
             info.removeWaypoint(message.w.id);
 

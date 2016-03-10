@@ -1,0 +1,11 @@
+{
+    "parent": "block/half_slab",
+    "textures": {
+        "bottom": 
+"waypoints:blocks/bottom-6",
+        "top": 
+"waypoints:blocks/waypoint-8",
+        "side":
+"waypoints:blocks/waypoint-side-m"
+    }
+}

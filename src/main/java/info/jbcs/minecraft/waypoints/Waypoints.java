@@ -1,15 +1,16 @@
 package info.jbcs.minecraft.waypoints;
 
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.*;
-import cpw.mods.fml.common.registry.GameRegistry;
+
 import info.jbcs.minecraft.waypoints.block.BlockWaypoint;
+import info.jbcs.minecraft.waypoints.generation.WayPoint_Generation;
+import info.jbcs.minecraft.waypoints.item.Debug_States;
 import info.jbcs.minecraft.waypoints.item.ItemWaypoint;
+import info.jbcs.minecraft.waypoints.item.Item_spawn_waypoint;
 import info.jbcs.minecraft.waypoints.network.MessagePipeline;
 import info.jbcs.minecraft.waypoints.proxy.Proxy;
+import info.jbcs.minecraft.waypoints.render.Render_Registry;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.world.World;
@@ -17,12 +18,29 @@ import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.SaveHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.io.File;
 import java.io.IOException;
 
-@Mod(modid = "Waypoints", name = "Waypoints", version = "1.1.1")
+@Mod(modid = Waypoints.MODID, name = Waypoints.MODNAME, version = Waypoints.VERSION)
 public class Waypoints {
+	
+	
+	public static final String MODID = "Waypoints";
+	public static final String MODNAME = "Waypoints";
+	public static final String VERSION = "1.1";
+	
+	
+	
     static Configuration config;
     public static boolean compactView;
     public static String default_recipe = "3x2,minecraft:stone:1,minecraft:stone:1,minecraft:stone:1,minecraft:stone:1,minecraft:ender_pearl:1,minecraft:stone:1";
@@ -33,6 +51,8 @@ public class Waypoints {
 
     public static int maxSize = 3;
 
+    public static Item debug_states_tool;
+    public static Item item_spawn_waypoint;
     public static BlockWaypoint blockWaypoint;
 
     @Mod.Instance("Waypoints")
@@ -52,27 +72,36 @@ public class Waypoints {
     public void preInit(FMLPreInitializationEvent event) {
         config = new Configuration(event.getSuggestedConfigurationFile());
         config.load();
-
+        
+       // GameRegistry.registerBlock(blockWaypoint =new BlockWaypoint("waypoint"),ItemWaypoint.class, "waypoint");
+        GameRegistry.registerBlock(blockWaypoint =new BlockWaypoint("waypoint"), "waypoint");
+        
+        GameRegistry.registerItem(debug_states_tool = new Debug_States( "debug_states_item"),"debug_states_item");
+        GameRegistry.registerItem(item_spawn_waypoint = new Item_spawn_waypoint( "item_spawn_waypoint"),"item_spawn_waypoint");
         proxy.preInit();
     }
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
         proxy.init();
-
+       
         tabWaypoints = CreativeTabs.tabDecorations;
 
-        blockWaypoint = new BlockWaypoint();
-        GameRegistry.registerBlock(blockWaypoint, ItemWaypoint.class, "waypoint");
+        
+        //blockWaypoint = new BlockWaypoint();
+        //GameRegistry.registerBlock(blockWaypoint, ItemWaypoint.class, "waypoint");
 
         compactView = config.get("general", "compact view", true, "Only show one line in Waypoint GUI, in order to fit more waypoints on the screen").getBoolean();
         recipe = config.get("general", "recipe", default_recipe, "You can change crafting recipe here").getString();
         craftable = config.get("general", "craftable", true, "Set to false to completely disable crafting recipe").getBoolean();
-        if (craftable) addRecipe(new ItemStack(blockWaypoint, 1), recipe);
+        //if (craftable) addRecipe(new ItemStack(blockWaypoint, 1), recipe);
         allowActivation = config.get("general", "can_no_ops_activate", true, "If set to false only ops can enable Waypoins").getBoolean();
         MinecraftForge.EVENT_BUS.register(this);
         config.save();
         proxy.registerPackets(messagePipeline);
+        
+        //
+        GameRegistry.registerWorldGenerator(new WayPoint_Generation(), 0);
     }
 
     @EventHandler
@@ -116,6 +145,7 @@ public class Waypoints {
         }
     }
 
+    /*
     public void addRecipe(ItemStack itemStack, String string) {
         String[] string_array = string.split(",");
         String[] itemstr;
@@ -170,7 +200,7 @@ public class Waypoints {
                     (char) 73, itemstack_array[8]
             );
     }
-
+	*/
 }
 
 

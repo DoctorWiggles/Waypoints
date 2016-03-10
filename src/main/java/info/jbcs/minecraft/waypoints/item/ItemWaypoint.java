@@ -1,11 +1,15 @@
 package info.jbcs.minecraft.waypoints.item;
 
 import info.jbcs.minecraft.waypoints.Waypoints;
+import info.jbcs.minecraft.waypoints.util.BSHelper;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
 public class ItemWaypoint extends ItemBlock {
@@ -17,34 +21,40 @@ public class ItemWaypoint extends ItemBlock {
     }
 
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hx, float hy, float hz) {
-        Block block1 = world.getBlock(x, y, z);
+    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hx, float hy, float hz) {
+    	int x= pos.getX();
+    	int y = pos.getY();
+    	int z = pos.getZ();    	
+    	//Block block1 = world.getBlock(pos);
+    	Block block1 = BSHelper.getBlockfromState(world, pos);
 
-        if (block1 != Blocks.vine && block1 != Blocks.tallgrass && block1 != Blocks.deadbush) { //&& (block1 == null || block1.isReplaceable(world, x, y, z))) {
+        if (block1 != Blocks.vine && block1 != Blocks.tallgrass && block1 != Blocks.deadbush
+        		//) 
+        && (block1 == null || block1.isReplaceable(world, pos))) {
             switch (side) {
-                case 0:
+                case DOWN:
                     y--;
                     break;
-                case 1:
+                case UP:
                     y++;
                     break;
-                case 2:
+                case NORTH:
                     z--;
                     break;
-                case 3:
+                case SOUTH:
                     z++;
                     break;
-                case 4:
+                case WEST:
                     x--;
                     break;
-                case 5:
+                case EAST:
                     x++;
                     break;
             }
         }
         if (stack.stackSize == 0) return false;
-        if (!player.canPlayerEdit(x, y, z, side, stack)) return false;
-        if (!world.canPlaceEntityOnSide(blockWaypoint, x, y, z, false, side, player, stack)) return false;
+        if (!player.canPlayerEdit(pos, side, stack)) return false;
+        //if (!world.canBlockBePlaced(blockWaypoint, pos, true, side, player, stack)) return false;
 
         int north = countWaypointBlocks(world, x, y, z, 0, 0, 1, Waypoints.maxSize-1);
         int south = countWaypointBlocks(world, x, y, z, 0, 0, -1, Waypoints.maxSize-1);
@@ -58,14 +68,14 @@ public class ItemWaypoint extends ItemBlock {
 
         Block block = blockWaypoint;
         int oldMeta = this.getMetadata(stack.getItemDamage());
-        int meta = blockWaypoint.onBlockPlaced(world, x, y, z, side, hx, hy, hz, oldMeta);
+        IBlockState meta = blockWaypoint.onBlockPlaced(world, pos, side, hx, hy, hz, oldMeta, player);
 
         int ox = x, oz = z;
-        while (world.getBlock(ox - 1, y, oz) == blockWaypoint) ox--;
-        while (world.getBlock(ox, y, oz - 1) == blockWaypoint) oz--;
+        while (BSHelper.getBlockfromState(world,new BlockPos(ox - 1, y, oz)) == blockWaypoint) ox--;
+        while (BSHelper.getBlockfromState(world,new BlockPos(ox, y, oz - 1)) == blockWaypoint) oz--;
 
-        if (placeBlockAt(stack, player, world, x, y, z, side, hx, hy, hz, meta)) {
-            world.playSoundEffect(x + 0.5F, y + 0.5F, z + 0.5F, block.stepSound.getBreakSound(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
+        if (placeBlockAt(stack, player, world, pos, side, hx, hy, hz, meta)) {
+            world.playSoundEffect(x + 0.5F, y + 0.5F, z + 0.5F, block.stepSound.getBreakSound(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getFrequency() * 0.8F);
             --stack.stackSize;
         }
 
@@ -73,12 +83,13 @@ public class ItemWaypoint extends ItemBlock {
     }
     int countWaypointBlocks(World world, int x, int y, int z, int px, int py, int pz, int maxSize){
         for(int c=0; c<maxSize+1; c++){
-            if(world.getBlock(x+(c+1)*px,y+(c+1)*py,z+(c+1)*pz)!=blockWaypoint) return c;
+            if(BSHelper.getBlockfromState(world, new BlockPos(x+(c+1)*px, y+(c+1)*py, z+(c+1)*pz))!=blockWaypoint) return c;
         }
         return -1;
     }
     boolean isActivated(World world, int x, int y, int z){
-        return world.getBlockMetadata(x, y, z) != 0 && world.getBlock(x, y, z)==blockWaypoint;
+    	BlockPos pos = new BlockPos(x,y,z);
+        return BSHelper.getMetafromState(world,pos) != 0 && BSHelper.getBlockfromState(world,pos)==blockWaypoint;
     }
 
 }

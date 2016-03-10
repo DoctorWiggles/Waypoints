@@ -14,7 +14,8 @@ public class Packets {
     public static void sendWaypointsToPlayer(EntityPlayerMP player, final int srcWaypointId) throws IOException {
         ArrayList<Waypoint> waypoints = new ArrayList<Waypoint>();
 
-        final WaypointPlayerInfo info = WaypointPlayerInfo.get(player.getDisplayName());
+        //final WaypointPlayerInfo info = WaypointPlayerInfo.get(player.getDisplayName());
+        final WaypointPlayerInfo info = WaypointPlayerInfo.get(player.getDisplayName().toString());
         if (info == null) return;
 
         info.addWaypoint(srcWaypointId);

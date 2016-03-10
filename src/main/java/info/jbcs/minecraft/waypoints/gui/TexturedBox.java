@@ -18,6 +18,9 @@ public class TexturedBox {
     }
 
     public void render(GuiScreenPlus gui, int x, int y, int w, int h) {
+    	int a = 0;
+    	//if (a == 0) return;
+    	
         int x2 = x + borderLeft;
         int x3 = x + w - borderRight;
         int y2 = y + borderTop;

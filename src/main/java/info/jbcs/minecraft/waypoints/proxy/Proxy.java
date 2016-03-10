@@ -1,6 +1,7 @@
 package info.jbcs.minecraft.waypoints.proxy;
 
-import cpw.mods.fml.relauncher.Side;
+
+import net.minecraftforge.fml.relauncher.Side;
 import info.jbcs.minecraft.waypoints.network.*;
 
 public class Proxy {
