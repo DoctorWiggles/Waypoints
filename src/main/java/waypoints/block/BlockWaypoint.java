@@ -6,6 +6,7 @@ import waypoints.Waypoint;
 import waypoints.WaypointPlayerInfo;
 import waypoints.WaypointTeleporter;
 import waypoints.Waypoints;
+import waypoints.config.Config;
 import waypoints.network.MsgEditWaypoint;
 import waypoints.network.MsgNameWaypoint;
 import waypoints.network.MsgRedDust;
@@ -133,7 +134,8 @@ public class BlockWaypoint extends Block {
         //boolean isOP = MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile());
         /* TODO double check op prives **/
         boolean isOP = MinecraftServer.getServer().getConfigurationManager().canSendCommands(player.getGameProfile());
-        if (Waypoints.allowActivation || isOP)
+        //if (Waypoints.allowActivation || isOP)
+        if (Config.allowActivation || isOP)
         	activateStructure(world, x, y, z);
 		Text.out(player, "HERE", EnumChatFormatting.GRAY);
 
@@ -150,7 +152,8 @@ public class BlockWaypoint extends Block {
             MsgNameWaypoint msg = new MsgNameWaypoint(src, "Waypoint #" + src.id);
             Waypoints.instance.messagePipeline.sendTo(msg, (EntityPlayerMP) player);
 
-        } else if (player.isSneaking() && (Waypoints.allowActivation || isOP)) {
+        //} else if (player.isSneaking() && (Waypoints.allowActivation || isOP)) {
+        } else if (player.isSneaking() && (Config.allowActivation || isOP)) {
             //Add waypoints
             ArrayList<Waypoint> waypoints = new ArrayList<Waypoint>();
             final WaypointPlayerInfo info = WaypointPlayerInfo.get(player.getDisplayName().toString());

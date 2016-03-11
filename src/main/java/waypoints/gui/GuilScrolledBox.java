@@ -11,6 +11,8 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
+import waypoints.config.Config;
+
 public class GuilScrolledBox extends GuiElement {
     public int offset = 0;
     int contentHeight = 0;
@@ -103,15 +105,15 @@ public class GuilScrolledBox extends GuiElement {
     //public static final ResourceLocation stone = new ResourceLocation("textures/blocks/stone_andesite_smooth.png");
     public static final ResourceLocation stone = new ResourceLocation("textures/blocks/stonebrick.png");
     public static final ResourceLocation classic = new ResourceLocation("textures/gui/options_background.png");
-
+        
     @Override
     public void render() {
     	
-    	boolean flag = false;
+    	
     	
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         Minecraft.getMinecraft().getTextureManager().bindTexture(sandy);        
-        if(flag)Minecraft.getMinecraft().getTextureManager().bindTexture(classic);
+        if(Config.classic_style)Minecraft.getMinecraft().getTextureManager().bindTexture(classic);
         
         x0 = -gui.screenX;        
         x1 = -gui.screenX + gui.width;
@@ -137,7 +139,7 @@ public class GuilScrolledBox extends GuiElement {
         GL11.glDisable(GL11.GL_BLEND);
 
         Minecraft.getMinecraft().getTextureManager().bindTexture(stone);
-        if(flag)Minecraft.getMinecraft().getTextureManager().bindTexture(classic);
+        if(Config.classic_style)Minecraft.getMinecraft().getTextureManager().bindTexture(classic);
         
         overlayBackground(-gui.screenY, y, 0x404040, 0xff, 0xff);
         overlayBackground(h, -gui.screenY + gui.height, 0x404040, 0xff, 0xff);

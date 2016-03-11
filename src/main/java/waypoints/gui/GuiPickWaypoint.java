@@ -2,8 +2,10 @@ package waypoints.gui;
 
 import waypoints.Waypoint;
 import waypoints.Waypoints;
+import waypoints.config.Config;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
+
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -30,7 +32,8 @@ public class GuiPickWaypoint extends GuiScreenPlus {
 
         addChild(scroller = new GuilScrolledBox(0, 22, 227, 199 - 12 - 22));
 
-        int buttonHeight = Waypoints.compactView ? 14 : 36;
+        //TODO int buttonHeight = Waypoints.compactView ? 14 : 36;
+        int buttonHeight = Config.compactView ? 14 : 36;
 
         for (final Waypoint w : waypoints) {
             GuiWaypointButton button;

@@ -2,9 +2,11 @@ package waypoints.gui;
 
 import waypoints.Waypoint;
 import waypoints.Waypoints;
+import waypoints.config.Config;
 import waypoints.network.MsgDelete;
 import waypoints.network.MsgTeleport;
 import net.minecraft.client.Minecraft;
+
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -32,7 +34,8 @@ public class GuiWaypoints extends GuiScreenPlus {
 
         addChild(scroller = new GuilScrolledBox(0, 22, 227, 199 - 12 - 22));
 
-        int buttonHeight = Waypoints.compactView ? 14 : 36;
+        //TODO int buttonHeight = Waypoints.compactView ? 14 : 36;
+        int buttonHeight = Config.compactView ? 14 : 36;
 
         int i = 0;
         for (final Waypoint w : waypoints) {

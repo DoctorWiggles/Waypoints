@@ -3,6 +3,7 @@ package waypoints.gui;
 import java.io.IOException;
 
 import waypoints.GeneralClient;
+import waypoints.config.Config;
 import waypoints.inventory.DummyContainer;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
@@ -218,8 +219,8 @@ public class GuiScreenPlus extends GuiContainer {
         float g = 255;
         float b = 255;
         
-        boolean classic = false;
-        if(classic){
+        
+        if(Config.classic_style){
         	g = 10;
             b = 10;
         }

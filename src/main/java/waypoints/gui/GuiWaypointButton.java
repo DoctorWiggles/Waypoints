@@ -2,6 +2,7 @@ package waypoints.gui;
 
 import waypoints.Waypoint;
 import waypoints.Waypoints;
+import waypoints.config.Config;
 import net.minecraftforge.common.DimensionManager;
 
 public class GuiWaypointButton extends GuiExButton {
@@ -37,7 +38,8 @@ public class GuiWaypointButton extends GuiExButton {
 
             gui.drawStringWithShadow(caption, x + 4, y + 3, 0xffffffff);
 
-            if (!Waypoints.compactView) {
+            //TODO if (!Waypoints.compactView) {
+            if (!Config.compactView) {
                 gui.drawStringWithShadow("Dimension: " + dimName, x + 4, y + 14, 0xff808080);
                 gui.drawStringWithShadow("Coordinates: (" + waypoint.x + ", " + waypoint.y + ", " + waypoint.z + ")", x + 4, y + 25, 0xff808080);
             }
